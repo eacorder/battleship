@@ -1,12 +1,21 @@
 import _ from 'lodash';
+import './style.css';
 
- function component() {
-   const element = document.createElement('div');
+import { navbar }  from "./components/navbar";
+import { pcside } from './components/pcside';
+import { playerside } from './components/playerside';
+ 
+function home () {
+    const body = document.querySelector("body")
+    const containerDiv = document.createElement("div");    
+    containerDiv.appendChild(navbar()); 
+    containerDiv.appendChild(playerside());
+    containerDiv.appendChild(pcside());
+ 
+    containerDiv.classList.add("container");
+    body.prepend(containerDiv);    
+    
+}
 
-  // Lodash, now imported by this script
-   element.innerHTML = _.join(['hola', 'webpack'], ' ');
 
-   return element;
- }
-
- document.body.appendChild(component());
+home();

@@ -1,14 +1,14 @@
 
 
-class Gameboard {
+ class Gameboard {
 
     constructor (player) {
         this.player = player;
         this.board = [];
         for (let i = 0; i < 10; i++) {
-            board[i] = [];
+            this.board[i] = [];
             for (let j = 0; j < 10; j++) {
-                board[i].push("");
+                this.board[i].push("");
             }
         }
     }
@@ -35,3 +35,5 @@ class Gameboard {
     
 
 }
+
+module.exports = Gameboard;
