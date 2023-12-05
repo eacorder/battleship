@@ -15,19 +15,20 @@ body {
 }
 
 .container { 
-    display: grid;
-    grid-template-columns:  1fr 1fr;
-    grid-template-rows: 1fr  7fr;    
+    display: flex; 
+    flex-direction: column;
     margin-top: 50px;
     border-radius: 20px 20px;    
-    height: 90%;
+    height: 90vh;
+    min-height: 850px;
     width: 90%;
     background-color: white;
+    
 }
 
 .container-side {
     display: flex;
-    
+    flex: 1;
     border-left: 5px   #506e74   solid;
     border-right: 5px   #506e74   solid;
     border-top: 5px   #506e74   solid;
@@ -40,31 +41,79 @@ body {
 
 .playerside {   
     border-bottom-left-radius: 20px 20px;        
+    display: flex;
+    flex-direction: column;
+   
+}
+
+.ships {
+    display: flex;    
+    border: 3px  #506e74 solid;
+    flex-direction: column;
+    row-gap: 20px;
+    padding: 20px; 
+    flex-grow: 1;
+    flex-wrap: wrap;
+    min-height: 350px;
+    min-width: 260px;
+}
+
+.shipContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.taken {
+    background-color: #7f9dad;
+}
+ 
+
+.ship{
+    height: 50px;
+    width: 50px;
+    border: 1px #506e74 solid;
+    background-color: #7f9dad;
 }
 
 .pcside {
     border-bottom-right-radius: 20px 20px;        
 }
 
+
+
 .board {
-    border-radius: 20px 20px;  
-  
+     
     margin: 10px;
     display: flex;
     
     flex-direction: column;
-    width: 55%;
-    height: 55%;
+    
+    border: #506e74  solid  ;  
+    border-width: 2px 3px 3px 2px;
+    margin-top: 30px;
+    margin-bottom: 20px;
 }
 
 .row{
-   display: flex;
-   flex: 1;
+   display: flex; 
+   width: min-content;
+   
 }
 
+ 
 .block{
-    flex: 1;
-    border: 3px  #506e74  solid  ;  
+    height: 50px;
+    width: 50px;
+    border-left: 1px #506e74  solid;
+    border-top: 1px #506e74 solid; 
+}
+
+
+
+.start{
+    gap: 30px;
 }
 
 navbar {
@@ -79,6 +128,7 @@ navbar {
     border-top-right-radius: 20px 20px;
     border: #506e74 5px solid;
 }
+
 
 
   
