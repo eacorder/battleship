@@ -5,12 +5,7 @@
     constructor (player) {
         this.player = player;
         this.board = [];
-        for (let i = 0; i < 10; i++) {
-            this.board[i] = [];
-            for (let j = 0; j < 10; j++) {
-                this.board[i].push("");
-            }
-        }
+        
     }
 
     placeShip(col, row, ship){
@@ -30,6 +25,15 @@
 
     checkBlock(col, row) {
         return this.board[col][row] == "" ? 1 : 0; 
+    }
+
+    clear(){
+       
+        for(let i = 0 ; i < 100 ; i++){
+            this.board[i] = "";
+            
+        }
+        
     }
 
     

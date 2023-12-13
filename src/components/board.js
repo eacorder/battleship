@@ -1,12 +1,10 @@
-const gameboard = require('../factories/Gameboard')
 
 
-export function board(player) {
+export function board(boardPlayer) {
     const div = document.createElement("div");
     div.setAttribute("id","player")
     div.classList.add("board");
-    let game = new gameboard();
-    game.player = player;
+   
     let countId = 0;
     for (let i=0; i<10; i++){
         const row = document.createElement("div");
@@ -17,6 +15,7 @@ export function board(player) {
             block.classList.add("block");
             block.id = countId;
             row.appendChild(block);
+            boardPlayer.board[countId] = "";
             countId++;
         }
     }

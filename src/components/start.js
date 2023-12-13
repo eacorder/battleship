@@ -1,40 +1,63 @@
 
 import {board} from './board';
-import {ship} from './ship';
+import {shipContainer} from './shipsContainer';
 
-export function start () {      
-    const div = document.createElement("div");
-    const divShips = document.createElement("div");
+export function start (boardPlayer) {      
+    const div = document.createElement("div"); 
     const divShipContainer = document.createElement("div");
+    const divContainer = document.createElement("div");   
+    const divMain = document.createElement("div");    
+    
     const titleShips = document.createElement("h2");
+    const titleBoard = document.createElement("h2");
 
-    const ship1 = document.createElement("div");
-    const ship2 = document.createElement("div");
-    const ship3 = document.createElement("div");
-    const ship4 = document.createElement("div");
-    const ship5 = document.createElement("div");
 
     div.classList.add("start"); 
-    div.classList.add("container-side"); 
-    divShipContainer.classList.add("shipContainer")
-
+    divMain.classList.add("container-side"); 
+    divShipContainer.classList.add("shipContainer");
+    divContainer.classList.add("shipContainer");
    
+
+    titleBoard.textContent = "Player";
     titleShips.textContent = "Set Ships";
+
+  
+    divContainer.appendChild(titleBoard);
+    divContainer.appendChild(board(boardPlayer));
+    divShipContainer.appendChild(titleShips);
+    divShipContainer.appendChild(shipContainer());
     
 
-    divShips.classList.add("ships");
-    divShips.appendChild(ship("alpha",5, 0)); 
-    divShips.appendChild(ship("beta",4, 1)); 
-    divShips.appendChild(ship("celta",4, 2)); 
-    divShips.appendChild(ship("delta",3, 3)); 
-    divShips.appendChild(ship("gama",2, 4));  
-
+    divMain.appendChild(divShipContainer);
+    divMain.appendChild(divContainer);
    
-    divShipContainer.appendChild(titleShips);
-    divShipContainer.appendChild(divShips);
-    div.appendChild(divShipContainer);
-    div.appendChild(board("player"));
+
+    div.appendChild(divMain);
+    div.appendChild(optionButtons());
+
     return div
     
+}
+
+ function optionButtons () {
+    const divButtonContainer = document.createElement("div");
+    const buttonRotate = document.createElement("button");
+    const buttonReset = document.createElement("button");
+    const buttonStart = document.createElement("button");
+    buttonRotate.classList.add("button");
+    buttonRotate.classList.add("rotate");
+    buttonStart.classList.add("button");
+    buttonReset.classList.add("button");
+    buttonReset.classList.add("reset");
+    buttonReset.textContent = "Reset";
+    buttonRotate.textContent = "Rotate";
+    buttonStart.textContent = "Start";
+
+    divButtonContainer.appendChild(buttonRotate);
+    divButtonContainer.appendChild(buttonStart);
+    divButtonContainer.appendChild(buttonReset);
+
+    
+    return divButtonContainer;
 }
 

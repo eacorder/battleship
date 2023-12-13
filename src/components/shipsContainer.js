@@ -1,5 +1,17 @@
 
-export function ship(name, length, id) {
+export function shipContainer(){
+    const divShips = document.createElement("div");
+   
+    divShips.classList.add("ships");
+    divShips.appendChild(ship("alpha",5, 0)); 
+    divShips.appendChild(ship("beta",4, 1)); 
+    divShips.appendChild(ship("celta",4, 2)); 
+    divShips.appendChild(ship("delta",3, 3)); 
+    divShips.appendChild(ship("gama",2, 4));  
+    return divShips;
+}
+
+ function ship(name, length, id) {
     const div = document.createElement("div");
     div.classList.add("row");
     div.classList.add("draggable");
@@ -15,6 +27,7 @@ export function ship(name, length, id) {
         
     }
 
-
     return div
 }
+
+
