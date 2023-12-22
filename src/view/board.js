@@ -1,6 +1,6 @@
 
 
-export function board(boardPlayer) {
+export function board() {
     const div = document.createElement("div");
     div.setAttribute("id","player")
     div.classList.add("board");
@@ -15,7 +15,6 @@ export function board(boardPlayer) {
             block.classList.add("block");
             block.id = countId;
             row.appendChild(block);
-            boardPlayer.board[countId] = "";
             countId++;
         }
     }

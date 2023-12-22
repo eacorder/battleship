@@ -4,7 +4,7 @@
 
     constructor (player) {
         this.player = player;
-        this.board = [];
+        this.board = Array(100).fill(""); 
         
     }
 
@@ -29,10 +29,7 @@
 
     clear(){
        
-        for(let i = 0 ; i < 100 ; i++){
-            this.board[i] = "";
-            
-        }
+        this.board = Array(100).fill(""); 
         
     }
 

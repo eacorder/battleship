@@ -2,8 +2,8 @@
 import {board} from './board';
 import {shipContainer} from './shipsContainer';
 
-export function start (boardPlayer) {      
-    const div = document.createElement("div"); 
+export function start () {      
+    const div = document.querySelector(".containerContent"); 
     const divShipContainer = document.createElement("div");
     const divContainer = document.createElement("div");   
     const divMain = document.createElement("div");    
@@ -13,17 +13,17 @@ export function start (boardPlayer) {
 
 
     div.classList.add("start"); 
-    divMain.classList.add("container-side"); 
+    divMain.classList.add("contentStart"); 
     divShipContainer.classList.add("shipContainer");
     divContainer.classList.add("shipContainer");
    
 
     titleBoard.textContent = "Player";
-    titleShips.textContent = "Set Ships";
+    titleShips.textContent = "Drag and Set Ships";
 
   
     divContainer.appendChild(titleBoard);
-    divContainer.appendChild(board(boardPlayer));
+    divContainer.appendChild(board());
     divShipContainer.appendChild(titleShips);
     divShipContainer.appendChild(shipContainer());
     
@@ -35,7 +35,7 @@ export function start (boardPlayer) {
     div.appendChild(divMain);
     div.appendChild(optionButtons());
 
-    return div
+    
     
 }
 
@@ -47,12 +47,14 @@ export function start (boardPlayer) {
     buttonRotate.classList.add("button");
     buttonRotate.classList.add("rotate");
     buttonStart.classList.add("button");
+    buttonStart.classList.add("btnStart");
     buttonReset.classList.add("button");
     buttonReset.classList.add("reset");
     buttonReset.textContent = "Reset";
     buttonRotate.textContent = "Rotate";
     buttonStart.textContent = "Start";
 
+    divButtonContainer.classList.add("startButtons");
     divButtonContainer.appendChild(buttonRotate);
     divButtonContainer.appendChild(buttonStart);
     divButtonContainer.appendChild(buttonReset);

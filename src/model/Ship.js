@@ -1,6 +1,7 @@
 class Ship { 
 
-    constructor (name, length) {  
+    constructor (id, name, length) { 
+        this.id =  id;
         this.name = name;
         this.length = length;
         this.health = length;

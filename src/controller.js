@@ -1,83 +1,119 @@
-import { navbar }  from "./view/navbar"; 
-const ship = require('./model/Ship')
-import { start } from './view/start';
-const gameboard = require('./model/Gameboard')
-import {shipContainer } from './view/shipsContainer';
-import {home} from './index';
+const ship = require('./model/Ship');
+const gameboard = require('./model/Gameboard');
+import {home} from './view/home'; 
+import { shipContainer } from './view/shipsContainer';
 
 
-export function index () {
-    let notDropped;
-    let classShips;
-    const alpha = new ship("alpha", 5);
-    const beta = new ship("beta", 4);
-    const celta = new ship("celta",4);
-    const delta = new ship("delta",3);
-    const gama = new ship("gama", 2);
-    const ships = [ alpha , beta, celta, delta, gama ];
-     
-   
-    let boardPlayer = new gameboard("player");
-     
-
-    const body = document.querySelector("body")
-    const containerDiv = document.createElement("div");    
-    containerDiv.appendChild(navbar());  
-    containerDiv.appendChild(start(boardPlayer)); 
-    containerDiv.classList.add("container");
-    body.prepend(containerDiv);    
+export function index (){
+    let ships  = new Array ; 
+    let boardPlayer = new gameboard("player");;
+    home(); 
+    init(ships);
+    events(ships, boardPlayer);
     
-   
+}
 
-    //events buttons
-    classShips = document.querySelector(".ships");
-   
-    document.querySelector(".rotate").addEventListener("click", ()=>{ 
-       
-        classShips.classList.contains("verticalContainer") ? classShips.classList.remove("verticalContainer") : classShips.classList.add("verticalContainer");
-        document.querySelectorAll(".draggable").forEach( ship => 
-            ship.classList.contains("vertical") ? ship.classList.remove("vertical") : ship.classList.add("vertical")           
-            );
-    })  
+function init(ships,boardPlayer) {
+    ships.push (new ship(0,"alpha", 5)) ;
+    ships.push (new ship(1,"beta", 4)) ;
+    ships.push (new ship(2,"celta",4)) ;
+    ships.push (new ship(3,"delta",3)) ;
+    ships.push (new ship(4,"gama", 2)) ;
+  
+     
+}
 
-    document.querySelector(".reset").addEventListener("click", ()=>{       
-       
-         
-        clearBoard (boardPlayer); 
-       
+function events (ships,boardPlayer) {
+    
+    //event button rotate ships
+    document.querySelector(".rotate").addEventListener("click", ()=> rotateShips() );
+
+    //event drag and drop    
+     
+    let draggedShip =  new Object;  
+    const playerBoardBlocks = document.querySelectorAll(`#player .block` );
+    let draggableContainer = document.querySelector(".ships");
+    const optionShips = Array.from(draggableContainer.children);
+    optionShips.forEach( optionShip => optionShip.addEventListener('dragstart',(event) =>  dragStart(draggedShip)))
+    
+    playerBoardBlocks.forEach(playerBlock => {
+        playerBlock.addEventListener('dragover',(event) => dragOver());
+        playerBlock.addEventListener('drop',(event) => dropShip(draggedShip, ships,boardPlayer));
     })
-    dragdrop(boardPlayer,ships,notDropped); 
+
+    //restart game
+    document.querySelector(".reset").addEventListener("click", ()=>  clearBoard (boardPlayer));      
+
+    //start 
+    document.querySelector(".btnStart").addEventListener("click", ()=>  clearBoard (boardPlayer));     
+    
 }
 
 function clearBoard (boardPlayer) {
     const divShips = document.querySelector(".ships");
     document.querySelectorAll(".taken").forEach(block => block.className = "block");
-    divShips.innerHTML = "";
-    document.querySelector(".shipContainer div").remove();
-    document.querySelector(".container-side div:nth-of-type(1)").appendChild(shipContainer())
+    document.querySelectorAll(".remove").forEach(row => row.classList.remove("remove"));
     boardPlayer.clear();
 }
 
+function rotateShips () {
+    const shipsContainer = document.querySelector(".ships");
+    shipsContainer.classList.contains("verticalContainer") ? 
+        shipsContainer.classList.remove("verticalContainer") : 
+        shipsContainer.classList.add("verticalContainer");
 
-function addShip(boardPlayer,user, ship, startId,notDropped){
-    let angle = 0;
-    angle = document.querySelector(".ships").classList.contains("verticalContainer") ? angle = 1 : angle = 0;
+    document.querySelectorAll(".draggable").forEach( ship => 
+                                                        ship.classList.contains("vertical") ? 
+                                                        ship.classList.remove("vertical") : 
+                                                        ship.classList.add("vertical") );        
+}
+
+function dragStart(draggedShip){
+
+    draggedShip.ship = event.target;
+    draggedShip.notDropped = false;
+     
+}
+
+function dragOver(){
+    event.preventDefault()
+     
+}
+
+function dropShip(draggedShip,  ships, boardPlayer){
+  
+    const startId = event.target.id 
+    draggedShip.shipObj = ships[draggedShip.ship.id]
     
-    const boardBlocks = document.querySelectorAll(`#${user} .block` );
+    addShip(boardPlayer, startId,draggedShip)
+    
+    if(!draggedShip.notDropped){
+        draggedShip.ship.classList.add("remove");
+        
+    }
+}
+
+function addShip(boardPlayer,  startId, draggedShip){
+   
+    let position = 0;
+    position = document.querySelector(".ships").classList.contains("verticalContainer") ? position = 1 : position = 0;
+     
+    const boardBlocks = document.querySelectorAll(`#${boardPlayer.player} .block` );   
     let randomBoolean = Math.random() < 0.5; 
-    let isHorizontal = user === 'player' ? angle === 0 : randomBoolean;
+    let isHorizontal = boardPlayer.player === 'player' ? position === 0 : randomBoolean;
     let randomStarIndex = Math.floor(Math.random() * 100);
     let startIndex = startId ? startId : randomStarIndex;
 
-    let validStart = isHorizontal ? startIndex <= 100 - ship.length ? startIndex : 100 - ship.length:
+    let validStart = isHorizontal ? startIndex <= 100 - draggedShip.shipObj.length ? startIndex : 100 - draggedShip.shipObj.length:
                      // vertical
-                     startIndex <= 100 - 10 * ship.length ? startIndex : startIndex - ship.length * 100;
+                     startIndex <= 100 - 10 * draggedShip.shipObj.length ? startIndex : startIndex - draggedShip.shipObj.length * 100;
                      
     let shipBlocks = [];
-
-    for(let i = 0; i < ship.length; i++){
+  
+    for(let i = 0; i < draggedShip.shipObj.length; i++){
         if(isHorizontal)
-            shipBlocks.push(boardBlocks[Number(validStart) + i ] );
+           { shipBlocks.push(boardBlocks[Number(validStart) + i ] );
+            }
         else    
             shipBlocks.push(boardBlocks[Number(validStart) + i  * 10 ] );
     }
@@ -94,53 +130,19 @@ function addShip(boardPlayer,user, ship, startId,notDropped){
 
     const notTaken = shipBlocks.every(shipBlock => !shipBlock.classList.contains('taken'))  ;
    
-    if(valid && notTaken){
+    if(valid && notTaken){       
         shipBlocks.forEach( shipBlock => {
-            shipBlock.classList.add(ship.name);
+           
+            shipBlock.classList.add(draggedShip.shipObj.name);
             shipBlock.classList.add('taken');
-            boardPlayer.board[shipBlock.id]= ship;
+            boardPlayer.board[shipBlock.id]= draggedShip.shipObj;
+          
         })
+       
     }else {
-        if(user == "pc") addShip(ship);
-        if(user == "player") notDropped = true;
+       
+        if(boardPlayer.player == "pc") addShip(draggedShip.ship);
+        if(boardPlayer.player == "player") draggedShip.notDropped = true;
     }   
-  
+ 
 }
-
-function dragdrop(boardPlayer, ships,notDropped){
-    console.log("prueba")
-    let draggedShip;
-    let draggableContainer;
-    const playerBoardBlocks = document.querySelectorAll(`#player .block` );
-    draggableContainer = document.querySelector(".ships");
-    const optionShips = Array.from(draggableContainer.children);
-    optionShips.forEach( optionShip => optionShip.addEventListener('dragstart', dragStart))
-
-    playerBoardBlocks.forEach(playerBlock => {
-        playerBlock.addEventListener('dragover', dragOver);
-        playerBlock.addEventListener('drop', dropShip);
-    })
-   
-
-    function dragStart(e){
-         
-        notDropped = false
-        draggedShip = e.target 
-    }
-    function dragOver(e){
-        e.preventDefault()
-         
-    }
-    function dropShip(e){
-        const startId = e.target.id 
-        const ship = ships[draggedShip.id]
-        addShip(boardPlayer,"player", ship, startId,notDropped)
-        
-        if(!notDropped){
-            draggedShip.remove();
-            
-        }
-    }
-    
-}
-
